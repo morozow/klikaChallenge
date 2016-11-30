@@ -1,0 +1,38 @@
+[ignore]
+.*/node_modules/fbjs/.*
+
+[include]
+./src/
+;./application/common/format
+;./application/components/WebgineCore
+;./node_modules/should
+;./node_modules/lodash-es
+;./node_modules/immutable
+;./node_modules/rxjs
+;./node_modules/sprintf-js
+;./application/common/translate/*
+;./application/common/development/*
+;./application/localization/translate.en.js
+;./application/localization/translate.cz.js
+;./application/localization/formatters.js
+
+
+[libs]
+.*/types/.*
+./application/common/types/types.js.flow
+
+
+[options]
+module.file_ext=.js
+module.file_ext=.json
+module.file_ext=.jsx
+esproposal.class_instance_fields=enable
+module.name_mapper='\(Dashboard\).*' -> 'Dashboard'
+module.name_mapper='\(Task\).*' -> 'Task'
+module.name_mapper='\(TaskComment\).*' -> 'TaskComment'
+module.name_mapper='\(TasksList\).*' -> 'TasksList'
+module.system=haste
+module.use_strict=true
+module.system.node.resolve_dirname=src/components
+;module.system.node.resolve_dirname=application/components
+strip_root=true

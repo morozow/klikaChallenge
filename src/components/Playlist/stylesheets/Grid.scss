@@ -1,0 +1,112 @@
+$color-i-minimum: #e3e3e3;
+$color-i-middle-light2: #ccc;
+$color-i-middle: #ccc;
+$color-border: #ccc;
+$color-font: #232323;
+$color-font-inverse: #fff;
+
+$width-grid: 802px;
+
+.Grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.Grid__Table {
+  width: $width-grid;
+}
+
+.Grid__Filter {
+  width: $width-grid;
+}
+
+.Filter__ControlsBlock {
+  display: flex;
+
+  .Filter__Control {
+    width: 200px;
+
+    select {
+      width: 190px;
+    }
+  }
+}
+
+.GridTable {
+
+}
+
+.GridTable__SizesList {
+  margin: 10px 0 0 0;
+}
+
+.ReactVirtualized__Table {
+  border: 1px solid $color-border;
+  width: $width-grid;
+}
+
+.ReactVirtualized__Table__headerRow {
+  background-color: $color-i-minimum;
+  font-weight: bold;
+  box-sizing: border-box;
+  justify-content: flex-start;
+  top: 0;
+  min-width: 100%;
+  width: 100%;
+  text-transform: capitalize;
+}
+
+.ReactVirtualized__Table__rowColumn, .ReactVirtualized__Table__headerColumn {
+  overflow: hidden;
+  border: solid $color-border;
+  border-width: 0 1px 0 0px;
+  padding: 0 10px;
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  flex-shrink: 0 !important;
+}
+
+.ReactVirtualized__Table__empty-row {
+  position: fixed;
+  width: calc(100% - 36px);
+  text-align: center;
+  font-weight: bold;
+}
+
+.ReactVirtualized__Table__headerColumn {
+  position: relative;
+}
+
+
+.ReactVirtualized__Table__row {
+  padding: 0;
+  border: solid $color-border;
+  border-width: 0 0 1px 0;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  min-width: 100%;
+  position: absolute;
+}
+
+.ReactVirtualized__Table__row[data-selected='true'] {
+  background-color: $color-i-middle-light2;
+  color:  $color-font;
+}
+.ReactVirtualized__Table__row[data-focused='true'] {
+  background-color: $color-i-middle;
+  color: $color-font-inverse;
+}
+
+.ReactVirtualized__Table__headerTruncatedText {
+  width: calc(100% - 10px);
+}
+
+.ReactVirtualized__Table__truncatedColumnText {
+  white-space: nowrap;
+}
+
+.ReactVirtualized__Table__noRows {
+  text-align: center;
+  margin-top: 20px;
+}

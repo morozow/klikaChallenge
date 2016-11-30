@@ -1,0 +1,37 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "settings": {
+    "import/resolver": "webpack"
+  },
+  "rules": {
+    "no-param-reassign": 1,
+    "no-void": 0,
+    "no-unused-vars": [
+      2,
+      {
+        "vars": "local",
+        "args": "all",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "arrow-parens": 0,
+    "import/prefer-default-export": 0,
+    "prefer-arrow-callback": 0,
+    "react/sort-comp": 0,
+    "no-useless-constructor": 0,
+    "no-use-before-define": 0,
+    "arrow-body-style": 0,
+    "react/jsx-first-prop-new-line": 0,
+    "react/jsx-space-before-closing": 0,
+    "react/jsx-filename-extension": 0,
+    "react/prefer-stateless-function": 0,
+    "react/jsx-boolean-value": 0,
+    "react/forbid-prop-types": 0,
+    "react/jsx-no-bind": 0,
+  }
+}
