@@ -91,29 +91,6 @@ export class Playlist extends Component {
     assign(this, { filterOptions: options });
   }
 
-  // componentWillUpdate() {
-  //   const { filterOptions, originalGridList } = this;
-  //
-  //   const optionsMapper = (field) => ({ [field]: value }) => ({ label: value, value });
-  //   const value = ({ value: v }) => v;
-  //
-  //   const composeOptions = (mapper, valueFn) =>
-  //     flow([$mMap(mapper), $mToJS, uniqBy(valueFn), createList, $lSortBy(valueFn)]);
-  //
-  //   const x = $mSortBy(value)(createMap({ foo: 'bar', bar: 'foo' }));
-  //   console.log($mToJS(x));
-  //
-  //   const fieldOptions = (field) => composeOptions(optionsMapper(field), value);
-  //
-  //   const updateFilterOptions = (field) => {
-  //     const optionsFrom = fieldOptions(field);
-  //     return filterOptions.set(field, optionsFrom(originalGridList));
-  //   };
-  //   const options = reduce(FILTER_FIELDS, updateFilterOptions, filterOptions);
-  //
-  //   assign(this, { filterOptions: options });
-  // }
-
   loadFakeListMore({ stopIndex, startIndex }) { // eslint-disable-line consistent-return
     const { originalGridList, filterState } = this;
 
