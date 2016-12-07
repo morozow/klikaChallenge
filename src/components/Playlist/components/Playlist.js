@@ -5,6 +5,7 @@ import flow from 'lodash-es/flow';
 import assign from 'lodash-es/assign';
 import uniqBy from 'lodash-es/uniqBy';
 import filter from 'lodash-es/filter';
+import reduce from 'lodash-es/reduce';
 import fromPairs from 'lodash-es/fromPairs';
 
 import { filter as filter$ } from 'rxjs/operator/filter';
@@ -18,7 +19,7 @@ import '../stylesheets/Grid.scss';
 
 const createArray = (size) => new Array(size);
 const createFakeDataArray = (size) => {
-  const data = fromPairs(FIELDS.map(([field, fakerFn]) => ([field, fakerFn()])));
+  const data = fromPairs(FIELDS.map(([field, _, fakerFn]) => ([field, fakerFn()])));
   return createArray(size).fill(data);
 };
 
@@ -45,20 +46,20 @@ export class Playlist extends Component {
 
     const { event$$ } = this.props;
     event$$::filter$(recognizeFilterEvent)
-      .subscribe((filterEvent) => {
-        const { originalGridList } = this;
+      .subscribe(({ field, value }) => {
+        const { originalGridList, filterState } = this;
 
         // update filter state according new event
-        const nextFilterState = (filterEvent.value === '-')
-          ? this.filterState.delete(filterEvent.field)
-          : this.filterState.merge({ [filterEvent.field]: filterEvent.value });
-        assign(this, { filterState: nextFilterState });
+        const nextFilterState = (value === '-')
+          ? filterState.delete(field)
+          : filterState.merge({ [field]: value });
 
         // working with new filterState value
-        const gridList = !this.filterState.isEmpty()
-          ? createList(filter(originalGridList.toJS(), this.filterState.toJS()))
+        const gridList = !nextFilterState.isEmpty()
+          ? createList(filter(originalGridList.toJS(), nextFilterState.toJS()))
           : originalGridList;
 
+        assign(this, { filterState: nextFilterState });
         this.setState({ gridList });
       });
   }
@@ -74,31 +75,56 @@ export class Playlist extends Component {
   }
 
   componentWillUpdate() {
-    let { filterOptions } = this;
+    const { filterOptions, originalGridList } = this;
 
-    FILTER_FIELDS.forEach((field) => {
-      const options = createList(uniqBy(
-        this.originalGridList.map(
-          ({ [field]: value }) => ({ label: value, value })
-        ).toJS(), ({ value }) => value)).sortBy(({ value }) => value);
-      filterOptions = filterOptions.set(field, options);
-    });
+    const mapper = (field) => ({ [field]: value }) => ({ label: value, value });
+    const valueFn = ({ value }) => value;
+    const updateOptions = (options, field) => {
+      const nextFieldOptions = createList(
+        uniqBy(originalGridList.map(mapper(field)).toJS(), valueFn)
+      ).sortBy(valueFn);
+      return options.set(field, nextFieldOptions);
+    };
 
-    assign(this, { filterOptions });
+    const options = reduce(FILTER_FIELDS, updateOptions, filterOptions);
+
+    assign(this, { filterOptions: options });
   }
 
+  // componentWillUpdate() {
+  //   const { filterOptions, originalGridList } = this;
+  //
+  //   const optionsMapper = (field) => ({ [field]: value }) => ({ label: value, value });
+  //   const value = ({ value: v }) => v;
+  //
+  //   const composeOptions = (mapper, valueFn) =>
+  //     flow([$mMap(mapper), $mToJS, uniqBy(valueFn), createList, $lSortBy(valueFn)]);
+  //
+  //   const x = $mSortBy(value)(createMap({ foo: 'bar', bar: 'foo' }));
+  //   console.log($mToJS(x));
+  //
+  //   const fieldOptions = (field) => composeOptions(optionsMapper(field), value);
+  //
+  //   const updateFilterOptions = (field) => {
+  //     const optionsFrom = fieldOptions(field);
+  //     return filterOptions.set(field, optionsFrom(originalGridList));
+  //   };
+  //   const options = reduce(FILTER_FIELDS, updateFilterOptions, filterOptions);
+  //
+  //   assign(this, { filterOptions: options });
+  // }
+
   loadFakeListMore({ stopIndex, startIndex }) { // eslint-disable-line consistent-return
+    const { originalGridList, filterState } = this;
+
     // work only with loaded rows when filter if active
-    if (!this.filterState.isEmpty()) {
+    if (!filterState.isEmpty()) {
       return false;
     }
-    let gridList = this.originalGridList.concat(fakeList(stopIndex - startIndex));
 
-    // save original grid list for empty filter
+    const gridList = originalGridList.concat(fakeList(stopIndex - startIndex));
+
     assign(this, { originalGridList: gridList });
-    if (!this.filterState.isEmpty()) {
-      gridList = createList(filter(gridList.toJS(), this.filterState.toJS()));
-    }
     this.setState({ gridList });
   }
 
@@ -114,7 +140,7 @@ export class Playlist extends Component {
   }
 
   clearFilter() {
-    this.filterState = createMap([]);
+    assign(this, { filterState: createMap({}) });
     this.setState({ gridList: this.originalGridList });
   }
 

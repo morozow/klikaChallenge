@@ -10,11 +10,19 @@ import {
 } from 'react-virtualized';
 import { list as createList, directionSort } from 'utils/immutable';
 import isEmpty from 'lodash-es/isEmpty';
+import reduce from 'lodash-es/reduce';
 
 import 'react-virtualized/styles.css';
 
 import { headerRenderer } from '../modules/headerRenderer.jsx';
-import { DISPLAY_ROWS_LIST, FULL_LIST_SIZE } from '../modules/Definitions';
+import { DISPLAY_ROWS_LIST, FULL_LIST_SIZE, FIELDS } from '../modules/Definitions';
+
+const initState = (props) => ({
+  sortBy: props.sortBy || 'artist',
+  sortDirection: props.sortDirection || SortDirection.ASC,
+  gridList: props.gridList || createList([]),
+  displayRowsNumber: props.displayRowsNumber || 10,
+});
 
 export class GridTable extends Component {
 
@@ -23,20 +31,11 @@ export class GridTable extends Component {
     height: 300,
     rowHeight: 40,
     width: 800,
-    displayRowsNumber: 10,
   };
 
   constructor(props) {
     super(props);
-
-    const { displayRowsNumber } = this.settings;
-
-    this.state = {
-      sortBy: 'artist',
-      sortDirection: SortDirection.ASC,
-      gridList: createList([]),
-      displayRowsNumber,
-    };
+    this.state = initState(props);
   }
 
   componentWillReceiveProps(props) {
@@ -69,16 +68,30 @@ export class GridTable extends Component {
     } = this.state;
 
     const { loadMoreRows } = this.props;
-    const { settings } = this;
+    const { headerHeight, rowHeight, width } = this.settings;
 
     const rowGetter = ({ index }) => gridList.get(index);
     const isRowLoaded = ({ index }) => !!gridList.get(index);
     const cellDataGetter = ({ dataKey, rowData }) => rowData[dataKey];
     const calculateHeight =
-      (size) => ((settings.rowHeight * size) + settings.headerHeight) - 1;
+      (size) => ((rowHeight * size) + headerHeight) - 1;
 
-    // height depends on displayed rows value event when list is empty or short
+    // height depends on displayed rows value even when list is empty or short
     const height = calculateHeight(displayRowsNumber);
+
+    const createHeaders = (acc, [name, label, _, columnWidth], key) => {
+      return acc.push(<Column
+        key={key}
+        label={label}
+        dataKey={name}
+        cellDataGetter={cellDataGetter}
+        headerRenderer={headerRenderer}
+        disableSort={false}
+        width={columnWidth}
+      />);
+    };
+
+    const headers = reduce(FIELDS, createHeaders, createList()).toJS();
 
     return (
       <div className="GridTable">
@@ -94,56 +107,17 @@ export class GridTable extends Component {
                   ref={registerChild}
                   onRowsRendered={onRowsRendered}
                   noRowsRenderer={noRowsRenderer}
-                  headerHeight={settings.headerHeight}
+                  headerHeight={headerHeight}
                   height={height}
-                  rowHeight={settings.rowHeight}
+                  rowHeight={rowHeight}
                   rowGetter={rowGetter}
                   rowCount={gridList.size}
                   sort={::this.sortGrid}
                   sortBy={sortBy}
                   sortDirection={sortDirection}
-                  width={settings.width}
+                  width={width}
                 >
-                  <Column
-                    label={'Index'}
-                    dataKey={'index'}
-                    cellDataGetter={cellDataGetter}
-                    headerRenderer={headerRenderer}
-                    disableSort={false}
-                    width={100}
-                  />
-                  <Column
-                    label={'Artist'}
-                    dataKey={'artist'}
-                    cellDataGetter={cellDataGetter}
-                    disableSort={false}
-                    headerRenderer={headerRenderer}
-                    width={200}
-                  />
-                  <Column
-                    label={'Song'}
-                    dataKey={'song'}
-                    cellDataGetter={cellDataGetter}
-                    disableSort={false}
-                    headerRenderer={headerRenderer}
-                    width={250}
-                  />
-                  <Column
-                    label={'Genre'}
-                    dataKey={'genre'}
-                    cellDataGetter={cellDataGetter}
-                    disableSort={false}
-                    headerRenderer={headerRenderer}
-                    width={150}
-                  />
-                  <Column
-                    label={'Year'}
-                    dataKey={'year'}
-                    cellDataGetter={cellDataGetter}
-                    disableSort={false}
-                    headerRenderer={headerRenderer}
-                    width={100}
-                  />
+                  {headers}
                 </Table>
               )}
             </AutoSizer>

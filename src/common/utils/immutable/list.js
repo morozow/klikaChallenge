@@ -10,3 +10,5 @@ import type { List as TList } from 'immutable.js.flow';
 export function list(array: any[]): TList {
   return new List(array);
 }
+
+export { List };
