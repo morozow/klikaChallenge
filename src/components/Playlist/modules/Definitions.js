@@ -14,3 +14,4 @@ export const FIELDS = [
 export const FULL_LIST_SIZE = 1000;
 export const FILTER_FIELDS = ['artist', 'genre', 'year'];
 export const DISPLAY_ROWS_LIST = [5, 10, 20, 50];
+export const PAGINATION_LUFT = 3;

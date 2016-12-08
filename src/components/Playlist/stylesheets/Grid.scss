@@ -20,6 +20,36 @@ $width-grid: 802px;
   width: $width-grid;
 }
 
+.GridTable__Pagination {
+  display: flex;
+  margin: 10px 0 10px 0;
+}
+
+.GridTable__Pagination__indicator {
+  min-width: 40px;
+  height: 40px;
+  line-height: 38px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 0 10px 0 0;
+  background-color: #444;
+  color: #fff;
+  cursor: pointer;
+
+  &.active {
+    background-color: #cbcbcb;
+    color: #444;
+  }
+}
+
+.GridTable__Pagination__empty-indicator {
+  min-width: 40px;
+  height: 40px;
+  line-height: 38px;
+  text-align: center;
+  margin: 0 10px 0 0;
+}
+
 .Filter__ControlsBlock {
   display: flex;
 

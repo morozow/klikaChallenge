@@ -11,17 +11,22 @@ import {
 import { list as createList, directionSort } from 'utils/immutable';
 import isEmpty from 'lodash-es/isEmpty';
 import reduce from 'lodash-es/reduce';
+import range from 'lodash-es/range';
 
 import 'react-virtualized/styles.css';
 
+import { PageIndicator } from '../modules/PageIndicator.jsx';
+import { NextPageIndicator } from '../modules/NextPageIndicator.jsx';
+import { PreviousPageIndicator } from '../modules/PreviousPageIndicator.jsx';
 import { headerRenderer } from '../modules/headerRenderer.jsx';
-import { DISPLAY_ROWS_LIST, FULL_LIST_SIZE, FIELDS } from '../modules/Definitions';
+import { DISPLAY_ROWS_LIST, FULL_LIST_SIZE, FIELDS, PAGINATION_LUFT } from '../modules/Definitions';
 
 const initState = (props) => ({
   sortBy: props.sortBy || 'artist',
   sortDirection: props.sortDirection || SortDirection.ASC,
   gridList: props.gridList || createList([]),
   displayRowsNumber: props.displayRowsNumber || 10,
+  page: props.page || 1,
 });
 
 export class GridTable extends Component {
@@ -59,12 +64,50 @@ export class GridTable extends Component {
     };
   }
 
+  onPaginationClick(e) {
+    e.preventDefault();
+    // Check if list is loaded -> load till necessary row.
+    // Table -> scrollTo ()
+  }
+
+  renderPagination() {
+    const { page, displayRowsNumber } = this.state;
+    const pagesTotal = Math.ceil(FULL_LIST_SIZE / displayRowsNumber);
+    const start = page - PAGINATION_LUFT < 1 ? 0 : page - PAGINATION_LUFT - 1;
+    const end =
+      page + PAGINATION_LUFT > pagesTotal ? pagesTotal : page + PAGINATION_LUFT;
+    let indicators = [];
+
+    // Add ...sign if display not full pagination
+    if (page > PAGINATION_LUFT) {
+      indicators.push(<PreviousPageIndicator />);
+    }
+
+    const numberIndicators = range(start, end).map((index) => {
+      const currentPage = index + 1;
+      return (<PageIndicator
+        active={page === currentPage}
+        page={currentPage}
+        onClick={::this.onPaginationClick}
+      />);
+    });
+    indicators = indicators.concat(numberIndicators);
+
+    // Add ...sign if display not full pagination
+    if (page < pagesTotal - PAGINATION_LUFT) {
+      indicators.push(<NextPageIndicator />);
+    }
+
+    return indicators;
+  }
+
   render() {
     const {
       sortBy,
       sortDirection,
       gridList,
       displayRowsNumber,
+      page,
     } = this.state;
 
     const { loadMoreRows } = this.props;
@@ -78,6 +121,13 @@ export class GridTable extends Component {
 
     // height depends on displayed rows value even when list is empty or short
     const height = calculateHeight(displayRowsNumber);
+    const onScroll = ({ scrollTop }) => {
+      const { page } = this.state;
+      const currentPage = Math.ceil((scrollTop / rowHeight) / displayRowsNumber);
+      if (currentPage !== 0 && currentPage !== page) {
+        this.setState({ page: currentPage });
+      }
+    };
 
     const createHeaders = (acc, [name, label, _, columnWidth], key) => {
       return acc.push(<Column
@@ -90,7 +140,6 @@ export class GridTable extends Component {
         width={columnWidth}
       />);
     };
-
     const headers = reduce(FIELDS, createHeaders, createList()).toJS();
 
     return (
@@ -107,6 +156,7 @@ export class GridTable extends Component {
                   ref={registerChild}
                   onRowsRendered={onRowsRendered}
                   noRowsRenderer={noRowsRenderer}
+                  onScroll={onScroll}
                   headerHeight={headerHeight}
                   height={height}
                   rowHeight={rowHeight}
@@ -115,6 +165,7 @@ export class GridTable extends Component {
                   sort={::this.sortGrid}
                   sortBy={sortBy}
                   sortDirection={sortDirection}
+                  scrollToIndex={page !== 1 ? page * displayRowsNumber : 0}
                   width={width}
                 >
                   {headers}
@@ -123,6 +174,9 @@ export class GridTable extends Component {
             </AutoSizer>
           )}
         </InfiniteLoader>
+        <div className="GridTable__Pagination">
+          {this.renderPagination()}
+        </div>
         <div className="GridTable__SizesList">
           {!isEmpty(DISPLAY_ROWS_LIST) && DISPLAY_ROWS_LIST
             .map((size, key) =>
