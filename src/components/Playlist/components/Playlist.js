@@ -13,7 +13,7 @@ import { filter as filter$ } from 'rxjs/operator/filter';
 import { GridTable } from './GridTable';
 import { Filter } from './Filter';
 import { FIELDS, FILTER_FIELDS } from '../modules/Definitions';
-import { FilterEvent, recognizeFilterEvent } from '../modules/FilterEvent';
+import { FilterEvent, recognizeFilterEvent } from '../events/FilterEvent';
 
 import '../stylesheets/Grid.scss';
 
@@ -108,11 +108,19 @@ export class Playlist extends Component {
   onFilter(event, field) {
     const { event$$ } = this.props;
     event$$.next(FilterEvent.create({
-      type: 'filter',
       event: {
         originalEvent: event,
         field,
       },
+    }));
+  }
+
+  openTrack(event, track) {
+    const { event$$ } = this.props;
+    event$$.next(RouterEvent.create({
+      params: {
+        track,
+      }
     }));
   }
 
@@ -137,6 +145,7 @@ export class Playlist extends Component {
         </div>
         <div className="Grid__Table">
           <GridTable
+            openTrack={::this.openTrack}
             gridList={gridList}
             loadMoreRows={::this.loadFakeListMore}
           />
@@ -148,4 +157,6 @@ export class Playlist extends Component {
 
 Playlist.propTypes = {
   event$$: PropTypes.any,
+  update$$: PropTypes.any,
+  pageState: PropTypes.any,
 };

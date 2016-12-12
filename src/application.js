@@ -1,44 +1,13 @@
 // @flow
 
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, browserHistory } from 'react-router';
 
-import assign from 'lodash-es/assign';
-
-import { Page } from './components/Page';
-import { initApplicationStreams } from './streams';
-
+import { AppRouter } from 'components/AppRouter';
 import './main.scss';
 
-class Application extends Component {
+render(<AppRouter ref={run}/>, document.getElementById('application'));
 
-  event$$ = void 0;
-
-  constructor(props) {
-    super(props);
-    assign(this, initApplicationStreams());
-  }
-
-  render() {
-    const { event$$ } = this;
-
-    return (
-      <div className="Application">
-        <Page event$$={event$$}>
-          {this.props.children}
-        </Page>
-      </div>
-    );
-  }
-}
-
-Application.propTypes = {
-  children: PropTypes.any,
+const run = () => {
+  console.log('Application is running...');
 };
-
-render((
-  <Router history={browserHistory}>
-    <Route path="/" component={Application} />
-  </Router>
-), document.getElementById('application'));

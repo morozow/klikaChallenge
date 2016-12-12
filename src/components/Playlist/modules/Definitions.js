@@ -11,7 +11,7 @@ export const FIELDS = [
   ['genre', 'Genre', faker.address.city, 150],
   ['year', 'Year', year(1990, 2016), 100],
 ];
-export const FULL_LIST_SIZE = 1000;
+export const FULL_LIST_SIZE = 100;
 export const FILTER_FIELDS = ['artist', 'genre', 'year'];
 export const DISPLAY_ROWS_LIST = [5, 10, 20, 50];
 export const PAGINATION_LUFT = 3;

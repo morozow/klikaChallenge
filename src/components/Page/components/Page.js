@@ -5,12 +5,15 @@ import '../stylesheets/Page.scss';
 
 export class Page extends Component {
   render() {
-    const { event$$ } = this.props;
+    const { event$$, update$$, pageState, RouterComponent, view } = this.props;
+
+    const RenderComponent = React
+      .cloneElement(<RouterComponent />, { pageState, event$$ });
 
     return (
       <div className="Page">
-        <Header/>
-        <View event$$={event$$}/>
+        <Header pageState={pageState} view={view}/>
+        {RenderComponent}
         <Footer/>
       </div>
     );
@@ -18,5 +21,9 @@ export class Page extends Component {
 }
 
 Page.propTypes = {
+  pageState: PropTypes.any,
   event$$: PropTypes.any,
+  view: PropTypes.string,
+  RouterComponent: PropTypes.any,
+  // children: PropTypes.any,
 };

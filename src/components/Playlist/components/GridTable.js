@@ -1,6 +1,7 @@
 /** @flow */
 
 import React, { Component, PropTypes } from 'react';
+import { browserHistory } from 'react-router'
 import {
   AutoSizer,
   Column,
@@ -110,7 +111,7 @@ export class GridTable extends Component {
       page,
     } = this.state;
 
-    const { loadMoreRows } = this.props;
+    const { loadMoreRows, pageState } = this.props;
     const { headerHeight, rowHeight, width } = this.settings;
 
     const rowGetter = ({ index }) => gridList.get(index);
@@ -166,6 +167,10 @@ export class GridTable extends Component {
                   sortBy={sortBy}
                   sortDirection={sortDirection}
                   scrollToIndex={page !== 1 ? page * displayRowsNumber : 0}
+                  onRowClick={({ index }) => {
+                    pageState.set('track', gridList.get(index));
+                    browserHistory.push('/track');
+                  }}
                   width={width}
                 >
                   {headers}
