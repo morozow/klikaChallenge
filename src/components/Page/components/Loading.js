@@ -1,15 +1,36 @@
 import React, { Component } from 'react';
 
+import '../stylesheets/Page.scss';
+
 export class Loading extends Component {
   state = {
-    mainFillColor: '#fff',
+    mainFillColor: '#aaa',
   };
+
+  // @try fromEvent(mouse)
+  constructor(props) {
+    super(props);
+    const mathColor = (i) => {
+      return (Math.round(Math.abs((Math.log(i) * 255) % 255))).toString(16);
+    };
+    let i = Math.floor(Math.random() * (255 - 1)) + 1;
+    setInterval(() => {
+      i = ++i % 255;
+      const colors = {
+        r: mathColor(i + (Math.PI * 0.1)),
+        g: mathColor((-i % 3) + (Math.PI * 0.8)),
+        b: mathColor((i % 2) + (Math.PI * 0.5)),
+      };
+      this.setState({ mainFillColor: `#${colors.r}${colors.g}${colors.b}` }
+        );
+    }, 300);
+  }
 
   render() {
     return (
       <div className="Loading">
-        {'Hello, World!'}
-        <svg width="55" height="80" viewBox="0 0 55 80" xmlns="http://www.w3.org/2000/svg" fill={this.state.mainFillColor}>
+        <div className="Loading__Spiner">
+          <svg width="55" height="80" viewBox="0 0 55 80" xmlns="http://www.w3.org/2000/svg" fill={this.state.mainFillColor}>
           <g transform="matrix(1 0 0 -1 0 80)">
             <rect width="10" height="20" rx="3">
               <animate
@@ -45,6 +66,7 @@ export class Loading extends Component {
             </rect>
           </g>
         </svg>
+        </div>
       </div>
     );
   }

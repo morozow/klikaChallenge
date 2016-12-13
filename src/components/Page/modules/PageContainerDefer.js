@@ -18,16 +18,23 @@ export class PageContainerDefer extends Component {
 
       patcher$subscriber = void 0;
 
-      componentWillMount() {
+      async componentWillMount() {
         const { RouterComponent } = props;
 
+        // const data = await this.proparePageContainerData();
         // after route component change creates new pageState patcher
         this.patcher$subscriber = props.update$$.subscribe((patch) => {
           const { pageState } = this.state;
           this.setState({ pageState: pageState.merge(patch), patch });
         });
 
+        // async get initial page data
         this.setState({ component: RouterComponent });
+        // await (() => {
+        //   setTimeout(() => {
+        //     this.setState({ component: RouterComponent });
+        //   }, 1000);
+        // })();
       }
 
       componentWillUnmount() {
