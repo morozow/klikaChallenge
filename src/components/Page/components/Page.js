@@ -1,16 +1,14 @@
 import React, { Component, PropTypes } from 'react';
-import { Header, View, Footer } from 'components';
-import { Subject } from 'rxjs/Subject';
+import { Header, Footer } from 'components';
 
 import '../stylesheets/Page.scss';
 
 export class Page extends Component {
   render() {
-    const { event$$, update$$, test$$, pageState, RouterComponent, view } = this.props;
-    console.log('Page props: ', this.props);
+    const { event$$, update$$, pageState, RouterComponent, view } = this.props;
 
     const RenderComponent = React
-      .cloneElement(<RouterComponent />, { pageState, event$$, update$$, test$$ });
+      .cloneElement(<RouterComponent />, { pageState, event$$, update$$ });
 
     return (
       <div className="Page">

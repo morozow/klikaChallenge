@@ -54,6 +54,7 @@
     "react-dom": "^15.3.2",
     "react-router": "^3.0.0",
     "react-virtualized": "8.5.3",
+    "rethinkdb": "2.3.3",
     "rxjs": "^5.0.0-rc.1",
     "uuid": "2.0.3"
   }

@@ -69,7 +69,6 @@ class ContainerDefer extends Component {
       componentWillMount() {
         // after route component change creates new pageState patcher
         this.patcher$subscriber = props.update$$.subscribe((patch) => {
-          console.log('Update Page State...', patch);
           const { pageState } = this.state;
           this.setState({ pageState: pageState.merge(patch), patch });
         });

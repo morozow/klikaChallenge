@@ -14,7 +14,7 @@ export class Header extends Component {
   }
 
   render() {
-    const { pageState, update$$ } = this.props;
+    const { pageState } = this.props;
 
     const song = pageState.getIn(['track', 'song'], 'Nothing to play...');
 
@@ -28,7 +28,7 @@ export class Header extends Component {
       <div className="Header">
         <h2 className="Header__Title">
           <button onClick={() => this.updateState(nextTrackState)}>Start track</button>
-          {`${song} ${Math.random()}`}
+          {`${song}`}
         </h2>
         {pageState.getIn(['player', 'play'])
           ? <button onClick={() => this.switch(false)}>Stop</button>

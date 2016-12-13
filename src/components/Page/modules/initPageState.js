@@ -6,10 +6,8 @@ class PageState extends Map {
   }
 
   static create(...args) {
-    return new PageStateMap(...args);
+    return new PageState(...args);
   }
-
-
 }
 
 export function initPageState(defaultPageState = {}) {
