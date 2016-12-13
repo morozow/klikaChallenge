@@ -6,22 +6,6 @@ import { Subject } from 'rxjs/Subject';
 import { Application } from 'components/Application';
 import { pageContainer$$ } from 'components/Page';
 
-// const abstractFilterDesicion = ({ view, dialog, grid }) => cond([
-//   [view, ({ type }) => eq(type, 'view')],
-//   [dialog, ({ type }) => eq(type, 'dialog')],
-//   [grid, ({ type }) => eq(type, 'grid')],
-// ]);
-//
-// const abstractMapDesicion = ({ view, dialog, grid }) => cond([
-//   [view, containerWrapper],
-//   [dialog, containerWrapper],
-//   [grid, containerWrapper],
-// ]);
-// const pageMapDesicion = abstractMapDesicion();
-// const pageDesicionX = pageContainer$$::map(pageDecision);
-
-// @practice const requireComponent = (location, callback) => () => ...;
-
 export class AppRouter extends Component {
 
   render() {

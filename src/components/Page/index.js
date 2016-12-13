@@ -1,8 +1,9 @@
 export { Page } from './components/Page';
+export { Loading } from './components/Loading';
 
 export { initPageState } from './modules/initPageState';
 export { PageStateStorage } from './modules/PageStateStorage';
-export { ContainerDefer } from './modules/ContainerDefer';
+export { PageContainerDefer } from './modules/PageContainerDefer';
 export { PageSettings } from './modules/PageSettings';
 
 export { pageContainer$$ } from './streams/PageContainerStream';

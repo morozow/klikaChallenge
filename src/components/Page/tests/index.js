@@ -7,4 +7,4 @@ class Application extends Component {
   }
 }
 
-redner(document.get);
+render(<Application />, document.getElementById('application'));
