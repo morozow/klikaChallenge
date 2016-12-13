@@ -1,17 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 
 import '../stylesheets/Track.scss';
 
 export class Track extends Component {
   render() {
+    const { pageState } = this.props;
     return (
       <div className="Track">
         <h2 className="Track__Title">
-          Playlist Track
-          <button onClick={(e) => browserHistory.push('/playlist')}>Go back...</button>
+          {`${pageState.getIn(['track', 'song'])}`}
         </h2>
+        <button onClick={(e) => browserHistory.push('/playlist')}>Go back...</button>
       </div>
     );
   }
 }
+
+Track.propTypes = {
+  pageState: PropTypes.any,
+};

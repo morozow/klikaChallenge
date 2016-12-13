@@ -102,6 +102,14 @@ export class GridTable extends Component {
     return indicators;
   }
 
+  onRowClick({ index }) {
+    const { openTrack } = this.props;
+    const { gridList } = this.state;
+    const track = gridList.get(index);
+    openTrack(track);
+  }
+
+
   render() {
     const {
       sortBy,
@@ -111,7 +119,7 @@ export class GridTable extends Component {
       page,
     } = this.state;
 
-    const { loadMoreRows, pageState } = this.props;
+    const { loadMoreRows } = this.props;
     const { headerHeight, rowHeight, width } = this.settings;
 
     const rowGetter = ({ index }) => gridList.get(index);
@@ -167,10 +175,7 @@ export class GridTable extends Component {
                   sortBy={sortBy}
                   sortDirection={sortDirection}
                   scrollToIndex={page !== 1 ? page * displayRowsNumber : 0}
-                  onRowClick={({ index }) => {
-                    pageState.set('track', gridList.get(index));
-                    browserHistory.push('/track');
-                  }}
+                  onRowClick={::this.onRowClick}
                   width={width}
                 >
                   {headers}
@@ -196,6 +201,7 @@ export class GridTable extends Component {
 
 GridTable.propTypes = {
   loadMoreRows: PropTypes.any,
+  openTrack: PropTypes.any,
 };
 
 const noRowsRenderer = () => {

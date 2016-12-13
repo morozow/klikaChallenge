@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { browserHistory } from 'react-router'
 import { list as createList, map as createMap } from 'utils/immutable';
 
 import flow from 'lodash-es/flow';
@@ -115,13 +116,10 @@ export class Playlist extends Component {
     }));
   }
 
-  openTrack(event, track) {
-    const { event$$ } = this.props;
-    event$$.next(RouterEvent.create({
-      params: {
-        track,
-      }
-    }));
+  openTrack(track) {
+    const { update$$ } = this.props;
+    update$$.next({ track });
+    browserHistory.push('track');
   }
 
   clearFilter() {

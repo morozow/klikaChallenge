@@ -9,9 +9,13 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 
 import identity from 'lodash-es/identity';
 import set from 'lodash-es/set';
+import last from 'lodash-es/last';
+import isEmpty from 'lodash-es/isEmpty';
 
 import { Application } from 'components/Application';
 import { Page, initPageState } from 'components/Page';
+
+import { list as createList, map as createMap } from 'utils/immutable';
 
 import { PageSettings } from '../modules/PageSettings';
 
@@ -31,53 +35,72 @@ const pageContainer$$ = new Subject();
 // const pageMapDesicion = abstractMapDesicion();
 // const pageDesicionX = pageContainer$$::map(pageDecision);
 
+// additional cache manage? level up for all application?
+// Maybe Redis cached state here? Something like fast cache/local, offline cache/etc...
+class StateStorageCache {
+  storage = createList([]);
+  save(state) {
+    this.storage = this.storage.push(createMap(state));
+    return this;
+  }
+  last() {
+    return this.storage.isEmpty() ? null : this.storage.last();
+  }
+  isEmpty() {
+    return this.storage.isEmpty();
+  }
+}
+const StateStorage = new StateStorageCache();
+
+// FIXME A bit shitty solution with globals
+class ContainerDefer extends Component {
+  static async create(props) {
+    return class PageContainer extends ContainerDefer {
+
+      state = {
+        patch: void 0,
+        pageState: !StateStorage.isEmpty()
+          ? StateStorage.last().get('pageState')
+          : initPageState(), // initPageState(),
+      };
+
+      patcher$subscriber = void 0;
+
+      componentWillMount() {
+        // after route component change creates new pageState patcher
+        this.patcher$subscriber = props.update$$.subscribe((patch) => {
+          console.log('Update Page State...', patch);
+          const { pageState } = this.state;
+          this.setState({ pageState: pageState.merge(patch), patch });
+        });
+      }
+
+      componentWillUnmount() {
+        StateStorage.save(this.state);
+        this.patcher$subscriber.unsubscribe();
+      }
+
+      render() {
+        const { pageState } = this.state;
+        return <Page {...props} pageState={pageState}/>;
+      }
+    };
+  }
+}
+
 pageContainer$$.subscribe(async ({ callback, ...props }: PageSettings) => {
   // request preparing component data in case of each component type
   //    Also we can do it while require config and put preparing data to configuration
   //
   // load data according page configuration with streams
 
-  // const initSettings$$ = new Subject();
-  // initSettings$$::map$(({ type }) => defer(fromPromise(new Promise((resolve) => {
-  //
-  //   resolve({ type });
-  // }))));
-
-  const { view, update$$ } = props;
-
   // eslint-disable-next-line
   // const initialPageProps = await props.set('initials', require(`../data/${view}`));
   const initialPageProps = set(props, 'initials', {/* load initial data */});
 
-  const Container = () => {
-    return class PageContainer extends Component {
-
-      state = {
-        patch: void 0,
-        pageState: initPageState(), // initPageState(),
-      };
-
-      patcher$subscriber = void 0;
-
-      componentDidMount() {
-        const { pageState } = this.state;
-        // after route component change creates new pageState patcher
-        const patcher$ = update$$::map$(identity);
-        this.patcher$subscriber = patcher$.subscribe((patch) => {
-          this.setState({ pageState: pageState.merge(patch), patch });
-        });
-      }
-
-      componentWillUnmount() {
-        this.patcher$subscriber.unsubscribe();
-      }
-
-      static render() {
-        return <Page {...initialPageProps}/>;
-      }
-    };
-  };
-  callback(null, Container);
+  ContainerDefer
+    .create(initialPageProps)
+    .then((Container) => callback(null, Container));
 });
 
 // @practice const requireComponent = (location, callback) => () => ...;
@@ -85,18 +108,15 @@ pageContainer$$.subscribe(async ({ callback, ...props }: PageSettings) => {
 export class AppRouter extends Component {
 
   render() {
-    // FIXME: replace from render? Is React Router re-renders after router changed?
-    const event$$ = new Subject();
-    const update$$ = new Subject();
-
     const requirePlaylistComponent = (_, callback) => {
       return require.ensure([], (require) => {
         const { Playlist } = require('components/Playlist');
+
         const config = {
           view: 'grid',
           RouterComponent: Playlist,
-          event$$,
-          update$$,
+          event$$: new Subject(),
+          update$$: new Subject(),
           callback,
         };
 
@@ -110,8 +130,8 @@ export class AppRouter extends Component {
         const config = {
           view: 'view',
           RouterComponent: Track,
-          event$$,
-          update$$,
+          event$$: new Subject(),
+          update$$: new Subject(),
           callback,
         };
 
