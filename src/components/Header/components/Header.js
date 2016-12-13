@@ -4,6 +4,15 @@ import '../stylesheets/Header.scss';
 
 export class Header extends Component {
 
+  updateState(nextTrackState) {
+    this.props.update$$.next(nextTrackState);
+  }
+
+  switch(onOff = false) {
+    const { pageState, update$$ } = this.props;
+    update$$.next(pageState.setIn(['player', 'play'], onOff));
+  }
+
   render() {
     const { pageState, update$$ } = this.props;
 
