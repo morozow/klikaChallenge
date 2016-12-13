@@ -11,7 +11,8 @@ export class Track extends Component {
         <h2 className="Track__Title">
           {`${pageState.getIn(['track', 'song'])}`}
         </h2>
-        <button onClick={(e) => browserHistory.push('/playlist')}>Go back...</button>
+        <button onClick={() => browserHistory.push('/track/dialog')}>Add Track</button>
+        <button onClick={() => browserHistory.push('/playlist')}>Go back...</button>
       </div>
     );
   }

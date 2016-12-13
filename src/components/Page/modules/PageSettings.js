@@ -7,6 +7,9 @@ const PageSettingsRecord = record({
   // component to render as view
   RouterComponent: null, // DummyComponent, // 404 can be used
 
+  // Dialog Type [new | edit | etc ..]
+  dialogType: void 0,
+
   // Page streams
   event$$: void 0,
   update$$: void 0,

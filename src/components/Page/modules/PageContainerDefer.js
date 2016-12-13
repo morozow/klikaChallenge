@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+
+import merge from 'lodash-es/merge';
+
 import { Page, Loading, initPageState, PageStateStorage } from 'components/Page';
 
 // create page cache storage instance
@@ -19,10 +22,7 @@ export class PageContainerDefer extends Component {
       patcher$subscriber = void 0;
 
       async componentWillMount() {
-        const { RouterComponent } = props;
-
-        // const data = await this.proparePageContainerData();
-        // after route component change creates new pageState patcher
+        const { RouterComponent } = merge(props, this.props);
         this.patcher$subscriber = props.update$$.subscribe((patch) => {
           const { pageState } = this.state;
           this.setState({ pageState: pageState.merge(patch), patch });

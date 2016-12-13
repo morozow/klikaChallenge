@@ -1,8 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { Header, Footer } from 'components';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 import '../stylesheets/Page.scss';
 
+/**
+ * Includes Router params
+ */
 export class Page extends Component {
   render() {
     const { event$$, update$$, pageState, RouterComponent, view } = this.props;
