@@ -1,25 +1,27 @@
-var webpack = require('webpack');
-var webpackDevMiddleware = require('webpack-dev-middleware');
-var webpackHotMiddleware = require('webpack-hot-middleware');
-var config = require('./webpack.config');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const express = require('express');
+const path = require('path');
+const config = require('./webpack.config');
 
-var express = require('express');
-var app = new (express)();
-var port = 3000;
+const app = new (express)();
+const DEV_SERVER_PORT = 3000;
 
-var compiler = webpack(config);
+const compiler = webpack(config);
 app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
 app.use(webpackHotMiddleware(compiler));
-app.use(express.static(__dirname + '/'));
+app.use(express.static(path.join(__dirname)));
 
-app.get("/**", function(req, res) {
-    res.sendFile(__dirname + '/index.html')
-});
+app.get('/**', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
-app.listen(port, function(error) {
-    if (error) {
-        console.error(error)
-    } else {
-        console.info("[%s] Listening on port %s. Open up http://localhost:%s/ in your browser.", new Date(), port, port)
-    }
+app.listen(DEV_SERVER_PORT, (error) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.info(
+          ` [${new Date()}]
+          Listening on port ${DEV_SERVER_PORT} 
+          Open up http://localhost:${DEV_SERVER_PORT}/ in your browser.`);
+  }
 });

@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs/Subject';
-import { PageContainerDefer, PageSettings } from 'components/Page';
+import { PageContainerDefer, PageSettings } from 'Page';
 
 import { filter as filter$ } from 'rxjs/operator/filter';
 

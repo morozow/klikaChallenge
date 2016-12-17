@@ -4,7 +4,7 @@ var webpack = require('webpack');
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
   entry: [
-    'webpack-hot-middleware/client',
+    'webpack-hot-middleware/client?http://localhost:3000',
     'babel-polyfill',
     './src/application.js',
   ],
@@ -24,7 +24,7 @@ module.exports = {
         loaders: ['babel-loader'],
         include: [path.resolve(__dirname, 'src')],
         test: /\.(js|jsx)$/,
-        plugins: ['transform-runtime'],
+        plugins: ['react-hot', 'transform-runtime'],
       },
       {
         include: [/lodash-es/],

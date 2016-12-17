@@ -1,9 +1,9 @@
-import { pageContainer$$ } from 'components/Page';
+import { pageContainer$$ } from 'Page';
 import { Subject } from 'rxjs/Subject';
 
 const requirePlaylistComponent = (_, callback) => {
   return require.ensure([], (require) => {
-    const { Playlist } = require('components/Playlist');
+    const { Playlist } = require('Playlist');
 
     const config = {
       view: 'grid',
@@ -19,7 +19,7 @@ const requirePlaylistComponent = (_, callback) => {
 
 const requireTrackComponent = (_, callback) => {
   return require.ensure([], (require) => {
-    const { Track } = require('components/Track');
+    const { Track } = require('Track');
     const config = {
       view: 'view',
       RouterComponent: Track,
@@ -34,7 +34,7 @@ const requireTrackComponent = (_, callback) => {
 
 const requireTrackDialogComponent = (dialogType) => (_, callback) => {
   return require.ensure([], (require) => {
-    const { TrackDialog } = require('components/Track');
+    const { TrackDialog } = require('Track');
     const config = {
       view: 'view',
       dialogType,

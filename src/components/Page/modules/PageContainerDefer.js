@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import merge from 'lodash-es/merge';
 
-import { Page, Loading, initPageState, PageStateStorage } from 'components/Page';
+import { Page, Loading, initPageState, PageStateStorage } from 'Page';
 
 // create page cache storage instance
 const StateStorage = new PageStateStorage();
