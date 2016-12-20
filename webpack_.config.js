@@ -1,9 +1,9 @@
-const path = require('path');
-const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
-const precss = require('precss');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+import path from 'path';
+import webpack from 'webpack';
+import autoprefixer from 'autoprefixer';
+import precss from 'precss';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 
 let appEntry;
 let devtool;
