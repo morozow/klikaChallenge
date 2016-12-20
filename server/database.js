@@ -2,11 +2,11 @@
 import faker from 'faker';
 import uuid from 'uuid';
 
-import assign from 'lodash-es/assign';
-import map from 'lodash-es/map';
-import eq from 'lodash-es/eq';
-import find from 'lodash-es/find';
-import remove from 'lodash-es/remove';
+import assign from 'lodash/assign';
+import map from 'lodash/map';
+import eq from 'lodash/eq';
+import find from 'lodash/find';
+import remove from 'lodash/remove';
 
 export class Track {
   id;

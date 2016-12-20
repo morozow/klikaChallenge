@@ -34,8 +34,8 @@ module.exports = {
       {
         test: /\.(scss|css)$/,
         loaders: ['style', 'css', 'sass'],
-      }
-    ]
+      },
+    ],
   },
   resolve: {
     extensions: ['', '.js', 'jsx', '.json', '.js.flow'],
