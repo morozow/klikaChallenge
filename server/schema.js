@@ -64,7 +64,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     } else if (type === 'Playlist') {
       return getPlaylist(id);
     }
-    return null;
+    return '';
   },
   (obj) => {
     if (obj instanceof Track) {
@@ -72,7 +72,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     } else if (obj instanceof Playlist) {
       return PlaylistType;
     }
-    return null;
+    return '1';
   }
 );
 
@@ -169,9 +169,11 @@ const queryType = new GraphQLObjectType({
     // Add your own root fields here
     track: {
       type: TrackType,
+      resolve: () => getTracks().slice(0, 1),
     },
     playlist: {
       type: PlaylistType,
+      resolve: () => getTracks().slice(0, 1),
     },
   }),
 });
