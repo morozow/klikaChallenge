@@ -7,7 +7,7 @@ import { introspectionQuery, printSchema } from 'graphql/utilities';
 import schema from '../schema';
 
 const jsonFile = path.join(__dirname, '../schema.json');
-const graphQLFile = path.join(__dirname, '../schema.graphqls');
+const graphQLFile = path.join(__dirname, '../schema.graphql');
 
 async function updateSchema() {
   try {

@@ -84,12 +84,13 @@ export class GridTable extends Component {
       indicators.push(<PreviousPageIndicator />);
     }
 
-    const numberIndicators = range(start, end).map((index) => {
+    const numberIndicators = range(start, end).map((index, key) => {
       const currentPage = index + 1;
       return (<PageIndicator
         active={page === currentPage}
         page={currentPage}
         onClick={::this.onPaginationClick}
+        key={key}
       />);
     });
     indicators = indicators.concat(numberIndicators);
@@ -202,6 +203,7 @@ export class GridTable extends Component {
 GridTable.propTypes = {
   loadMoreRows: PropTypes.any,
   openTrack: PropTypes.any,
+  gridList: PropTypes.any,
 };
 
 const noRowsRenderer = () => {

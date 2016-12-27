@@ -15,8 +15,8 @@ export class Track {
   genre;
   year;
 
-  constructor(id, name, artist, genre, year) {
-    assign(this, { id, name, artist, genre, year });
+  constructor(id, index, song, artist, genre, year) {
+    assign(this, { id, index, song, artist, genre, year });
   }
 }
 
@@ -47,11 +47,13 @@ const byId = (id) => ({ id: lookupId }) => eq(lookupId, id);
 /* Initial loaded Tracks if needed */
 const tracks = map(createArray(100), () => new Track(
   uuid(),
+  uuid(),
   faker.name.findName(),
   faker.name.findName(),
   faker.address.city(),
   randomYear(1990, 2016)
 ));
+console.log('tracks: ', tracks);
 
 /* Initial loaded Tracks if needed */
 const playlists = [
@@ -59,13 +61,14 @@ const playlists = [
   new Playlist(uuid(), faker.name.findName(), tracks.slice(0, 10)),
 ];
 
+
 /* Database simulation for Tracks */
 export const getTracks = () => tracks;
 export const removeTrack = (id) => remove(tracks, byId(id));
 export const getTrack = (id) => find(tracks, byId(id)) || null;
-export const addTrack = ({ name, artist, genre, year }) => {
+export const addTrack = ({ song, artist, genre, year }) => {
   // immutable will reduce function compexity
-  const nextTrack = new Track(uuid(), name, artist, genre, year);
+  const nextTrack = new Track(uuid(), uuid(), song, artist, genre, year);
   tracks.push(nextTrack);
   return nextTrack;
 };

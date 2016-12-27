@@ -9,15 +9,19 @@ import '../stylesheets/Page.scss';
  */
 export class Page extends Component {
   render() {
-    const { event$$, update$$, pageState, RouterComponent, view } = this.props;
+    const { event$$, update$$, pageState, RouterComponent, view, playlist } = this.props;
 
-    const RenderComponent = React
-      .cloneElement(<RouterComponent />, { pageState, event$$, update$$ });
+    console.log('RouterComponent: ', Object.keys(RouterComponent));
 
     return (
       <div className="Page">
         <Header pageState={pageState} view={view} update$$={update$$}/>
-        {RenderComponent}
+        <RouterComponent
+          playlist={playlist}
+          pageState={pageState}
+          event$$={event$$}
+          update$$={update$$}
+        />
         <Footer/>
       </div>
     );
@@ -30,5 +34,5 @@ Page.propTypes = {
   update$$: PropTypes.any,
   view: PropTypes.string,
   RouterComponent: PropTypes.any,
-  // children: PropTypes.any,
+  playlist: PropTypes.any,
 };

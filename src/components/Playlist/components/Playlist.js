@@ -6,6 +6,7 @@ import flow from 'lodash-es/flow';
 import assign from 'lodash-es/assign';
 import uniqBy from 'lodash-es/uniqBy';
 import filter from 'lodash-es/filter';
+import map from 'lodash-es/map';
 import reduce from 'lodash-es/reduce';
 import fromPairs from 'lodash-es/fromPairs';
 
@@ -26,6 +27,9 @@ const createFakeDataArray = (size) => {
 
 // Number -> Array -> List
 const fakeList = flow([createFakeDataArray, createList]);
+
+// @utils/graphql
+const mapListNodes = (list) => map(list.edges, (edge) => edge.node);
 
 export class Playlist extends Component {
 
@@ -66,9 +70,14 @@ export class Playlist extends Component {
   }
 
   componentDidMount() {
+    // const defaultOriginalGridList = mapListNodes(this.props.playlist.tracks);
+
     // different data to check default sort
-    const gridList = fakeList(5).concat(fakeList(5), fakeList(5), fakeList(5));
-    assign(this, { originalGridList: gridList });
+    // const gridList = fakeList(5).concat(fakeList(5), fakeList(5), fakeList(5));
+    // const gridList = createList(defaultOriginalGridList);
+    assign(this, {
+      originalGridList: createList(mapListNodes(this.props.playlist.tracks))
+    });
 
     // Safe setState in componentDidMount()
     // eslint-disable-next-line react/no-did-mount-set-state
@@ -157,4 +166,5 @@ Playlist.propTypes = {
   event$$: PropTypes.any,
   update$$: PropTypes.any,
   pageState: PropTypes.any,
+  playlist: PropTypes.any,
 };

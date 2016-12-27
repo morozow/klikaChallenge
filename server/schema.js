@@ -81,7 +81,10 @@ const TrackType = new GraphQLObjectType({
   description: 'Single Track from Playlist',
   fields: () => ({
     id: globalIdField('Track'),
-    name: {
+    index: {
+      type: GraphQLString,
+    },
+    song: {
       type: GraphQLString,
       description: 'Name of Track',
     },
@@ -127,7 +130,7 @@ const PlaylistType = new GraphQLObjectType({
 const addTrackMutation = mutationWithClientMutationId({
   name: 'AddTrack',
   inputFields: {
-    name: {
+    song: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'Track Name string',
     },

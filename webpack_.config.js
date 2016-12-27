@@ -5,9 +5,10 @@ import precss from 'precss';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 
-let appEntry;
-let devtool;
-let plugins;
+// default config
+let appEntry = [];
+let devtool = 'source-map';
+let plugins = [];
 
 const htmlTemplate = new HtmlWebpackPlugin({
   title: 'React, RxJS, GraphQL, Relay',
@@ -19,9 +20,9 @@ const htmlTemplate = new HtmlWebpackPlugin({
 const favIcon = new FaviconsWebpackPlugin('./assets/logo.png');
 
 if (process.env.NODE_ENV === 'production') {
-  appEntry = ['babel-polyfill', path.join(__dirname, 'scr/application.js')];
+  appEntry = appEntry.concat(['babel-polyfill', path.join(__dirname, 'scr/application.js')]);
   devtool = 'source-map';
-  plugins = [
+  plugins = plugins.concat([
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
@@ -38,7 +39,7 @@ if (process.env.NODE_ENV === 'production') {
     }),
     htmlTemplate,
     favIcon,
-  ];
+  ]);
 } else {
   appEntry = [
     'babel-polyfill',

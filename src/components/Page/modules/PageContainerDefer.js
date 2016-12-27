@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
+import Relay from 'react-relay';
 
 import merge from 'lodash-es/merge';
 
 import { Page, Loading, initPageState, PageStateStorage } from 'Page';
+
+import { list as createList } from 'utils/immutable';
 
 // create page cache storage instance
 const StateStorage = new PageStateStorage();
 
 export class PageContainerDefer extends Component {
   static async create(props) {
-    return class PageContainer extends PageContainerDefer {
+    // FIXME: Or make relay transformation here
+    // FIXME: (or in creation stream? or in ensure?)
+    class PageContainer extends PageContainerDefer {
 
       state = {
         patch: void 0,
@@ -49,12 +54,16 @@ export class PageContainerDefer extends Component {
           return <Loading />;
         }
 
+
         return (<Page
           {...props}
           component={component}
           pageState={pageState}
         />);
       }
-    };
+    }
+
+    const { fragments, initialVariables } = props;
+    return Relay.createContainer(PageContainer, { initialVariables, fragments });
   }
 }
