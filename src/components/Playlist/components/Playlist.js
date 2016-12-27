@@ -76,7 +76,7 @@ export class Playlist extends Component {
     // const gridList = fakeList(5).concat(fakeList(5), fakeList(5), fakeList(5));
     // const gridList = createList(defaultOriginalGridList);
     assign(this, {
-      originalGridList: createList(mapListNodes(this.props.playlist.tracks))
+      originalGridList: createList(mapListNodes(this.props.playlist.tracks)),
     });
 
     // Safe setState in componentDidMount()
