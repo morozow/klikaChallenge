@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Playlist } from 'components/Playlist';
+import { Playlist } from 'Playlist';
 
 import '../stylesheets/View.scss';
 
