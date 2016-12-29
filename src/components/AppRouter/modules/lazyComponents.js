@@ -13,7 +13,7 @@ const requirePlaylistComponent = (_, callback) => {
         playlist: () => Relay.QL`
             fragment on Playlist {
                 id,
-                tracks(first: $from) {
+                tracks(first: $first) {
                     edges {
                         node {
                             id,
@@ -30,7 +30,7 @@ const requirePlaylistComponent = (_, callback) => {
         `,
       },
       initialVariables: {
-        from: 10,
+        first: 11,
       },
       RouterComponent: Playlist,
       event$$: new Subject(),

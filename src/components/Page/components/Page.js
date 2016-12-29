@@ -11,11 +11,13 @@ export class Page extends Component {
   render() {
     const { event$$, update$$, pageState, RouterComponent, view, playlist } = this.props;
 
-    console.log('RouterComponent: ', Object.keys(RouterComponent));
-
     return (
       <div className="Page">
-        <Header pageState={pageState} view={view} update$$={update$$}/>
+        <Header
+          pageState={pageState}
+          view={view}
+          update$$={update$$}
+        />
         <RouterComponent
           playlist={playlist}
           pageState={pageState}

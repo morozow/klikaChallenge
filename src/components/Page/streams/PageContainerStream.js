@@ -17,9 +17,9 @@ export const PAGE_CONTAINER_VIEWS = [VIEWS_TYPES.grid, VIEWS_TYPES.view];
 // @section('logic')
 const chooseViewTypes = ({ view }: PageSettings) => PAGE_CONTAINER_VIEWS.includes(view);
 const relayContainerWithFragments = (settings: PageSettings) => {
-  const { fragments, RouterComponent } = settings;
+  const { fragments, initialVariables = void 0, RouterComponent } = settings;
   return assign(settings, {
-    RouterComponent: Relay.createContainer(RouterComponent, { fragments }),
+    RouterComponent: Relay.createContainer(RouterComponent, { fragments, initialVariables }),
   });
 };
 const initAndLoadPageContainer = ({ callback, ...props }: PageSettings) => {

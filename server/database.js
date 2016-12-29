@@ -58,7 +58,7 @@ console.log('tracks: ', tracks);
 /* Initial loaded Tracks if needed */
 const playlists = [
   new Playlist(uuid(), faker.name.findName(), tracks),
-  new Playlist(uuid(), faker.name.findName(), tracks.slice(0, 10)),
+  new Playlist(uuid(), faker.name.findName(), tracks),
 ];
 
 
